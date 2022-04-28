@@ -1,4 +1,0 @@
-bin:bin/shineenc
-lib:lib/libshine.so.3.0.1
-lnk:lib/libshine.so.3
-lnk:lib/libshine.so

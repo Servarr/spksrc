@@ -1,3 +1,0 @@
-rsc:bin/rsnapshot
-rsc:bin/rsnapshot-diff
-rsc:var/rsnapshot.conf.default
