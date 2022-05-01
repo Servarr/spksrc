@@ -6,7 +6,7 @@ on:
       package:
         description: 'Package to build'
         required: true
-        default: 'syno-magnet'
+        default: 'radarr'
       publish:
         description: 'Publish to repository'
         required: false
@@ -20,6 +20,7 @@ on:
     branches:
       - "**"
     paths:
+    - '.github/workflows/*'
     - 'spk/**'
     - 'cross/**'
     - 'native/**'
@@ -135,6 +136,32 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Packages for ${{ matrix.arch }}
+          name: ${{ matrix.arch }}
           path: packages/*.spk
           if-no-files-found: ignore
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+           workflow: build.yml
+      # - name: Download Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: aarch64-6.1
+      - uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ env.GITHUB_RUN_NUMBER }}
+          commitish: ${{ env.GITHUB_SHA }}
+          name: Servarr Synology Packages
+          body: >
+            Servarr synology packages
+          draft: true
+          prerelease: true
+          files: >
+            *.spk
+          gzip: false
