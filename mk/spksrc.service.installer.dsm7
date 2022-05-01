@@ -67,34 +67,6 @@ call_func "initialize_variables"
 
 ### Functions library
 
-#
-# syncronize all files from var folder in spk (extracted to target/var)
-# (@appdata) /var/packages/<package>/target/var -> /var/packages/<package>/var
-#
-syno_sync_var_folder () {
-    # take all files that do not alredy exist and rename the other files to *.new to avoid overwriting
-    # existing configuration files.
-    # finally remove the target/var folder that is not used under DSM 7.
-    if [ -d ${SYNOPKG_PKGDEST}/var -a "$(ls -A ${SYNOPKG_PKGDEST}/var 2>/dev/null)" ]; then
-    
-        echo "Install files from var folder"
-    
-        # Move all files except existing
-        echo "$RSYNC --ignore-existing --remove-source-files ${SYNOPKG_PKGDEST}/var/ ${SYNOPKG_PKGVAR}"
-        $RSYNC --ignore-existing --remove-source-files ${SYNOPKG_PKGDEST}/var/ ${SYNOPKG_PKGVAR}
-
-        # Rename any remaining (thus pre-existing) files with .new suffix
-        find ${SYNOPKG_PKGDEST}/var -type f -exec sh -c 'x="{}"; mv "$x" "${x}.new"' \;
-
-        # Move .new files (overwrite existing)
-        echo "$RSYNC --remove-source-files ${SYNOPKG_PKGDEST}/var/ ${SYNOPKG_PKGVAR}"
-        $RSYNC --remove-source-files ${SYNOPKG_PKGDEST}/var/ ${SYNOPKG_PKGVAR}
-
-        # Remove var folder extraced from spk
-        $RM ${SYNOPKG_PKGDEST}/var
-    fi
-}
-
 set_unix_permissions ()
 {
     echo "Notice: set_unix_permissions() is no longer required on DSM7."
@@ -153,10 +125,6 @@ postinst ()
 {
     log_step "postinst"
     call_func "save_wizard_variables" install_log
-
-    # copy target/var data to permanent storage
-    # and don't override old configurations
-    call_func "syno_sync_var_folder" install_log
 
     call_func "service_postinst" install_log
 
@@ -236,8 +204,6 @@ postupgrade ()
         $RSYNC ${TMP_DIR}/ ${SYNOPKG_PKGVAR} 2>&1 | install_log
     fi
 
-    # dsm7: Now sync in any new files to permanent storage
-    call_func "syno_sync_var_folder" install_log
     call_func "service_postupgrade" install_log
 
     exit 0
