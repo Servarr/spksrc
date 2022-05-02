@@ -1,27 +1,35 @@
 
 # Radarr service setup
 
-RADARR="${SYNOPKG_PKGDEST}/bin/Radarr"
+BWRAP="${SYNOPKG_PKGDEST}/bin/bwrap"
+RADARR="/usr/lib/radarr/bin/Radarr"
 
 # Radarr uses custom Config and PID directories
-CONFIG_DIR="${SYNOPKG_PKGVAR}"
-PID_FILE="${CONFIG_DIR}/radarr.pid"
+PID_FILE="${SYNOPKG_PKGVAR}/radarr.pid"
 
 GROUP="sc-download"
-LEGACY_GROUP="sc-media"
 
-SERVICE_COMMAND="env LD_LIBRARY_PATH=${SYNOPKG_PKGDEST}/lib ${RADARR} --nobrowser --data=${CONFIG_DIR}"
+# CONFIG_DIR is the directory inside the chroot
+CONFIG_DIR="/var/lib/radarr"
+
+SERVICE_COMMAND="${BWRAP} --bind ${SYNOPKG_PKGDEST}/rootfs / --proc /proc --dev /dev --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} --bind /volume1 /volume1 ${RADARR} --nobrowser --data=${CONFIG_DIR}"
 SVC_BACKGROUND=y
+
+fix_permissions ()
+{
+    if [ ${SYNOPKG_DSM_VERSION_MAJOR} -lt 7 ]; then
+        chown root:root "${BWRAP}"
+        chmod u+s "${BWRAP}"
+        set_unix_permissions "${SYNOPKG_PKGVAR}"
+    fi
+}
 
 service_postinst ()
 {
-    if [ ${SYNOPKG_DSM_VERSION_MAJOR} -lt 7 ]; then
-        set_unix_permissions "${CONFIG_DIR}"
+    # Move config.xml to .config
+    mv ${SYNOPKG_PKGDEST}/app/config.xml ${SYNOPKG_PKGVAR}
 
-        # If nessecary, add user also to the old group before removing it
-        syno_user_add_to_legacy_group "${EFF_USER}" "${USER}" "${LEGACY_GROUP}"
-        syno_user_add_to_legacy_group "${EFF_USER}" "${USER}" "users"
-    fi
+    fix_permissions
 }
 
 service_postupgrade ()
@@ -30,7 +38,5 @@ service_postupgrade ()
     # downgrade when synocommunity package is updated
     touch ${CONFIG_DIR}/update_required
 
-    if [ ${SYNOPKG_DSM_VERSION_MAJOR} -lt 7 ]; then
-        set_unix_permissions "${CONFIG_DIR}"
-    fi
+    fix_permissions
 }

@@ -8,7 +8,7 @@ REQUIRED_MIN_DSM = 6.0
 # .NET is not supported on PPC, ARM5, ARM7L and x86
 UNSUPPORTED_ARCHS = $(PPC_ARCHS) $(ARMv5_ARCHS) $(ARMv7L_ARCHS) $(i686_ARCHS)
 
-DEPENDS = cross/sqlite cross/radarr
+DEPENDS = cross/bubblewrap cross/debian-stretch cross/radarr
 
 MAINTAINER = Team Radarr
 MAINTAINER_URL = https://radarr.video/
@@ -25,7 +25,7 @@ LICENSE  = GPLv3
 
 SERVICE_USER = auto
 SERVICE_SETUP = src/service-setup.sh
-SERVICE_PORT = 7878
+SERVICE_PORT = 8310
 SERVICE_PORT_TITLE = $(DISPLAY_NAME)
 
 # Admin link for in DSM UI
@@ -35,20 +35,16 @@ WIZARDS_DIR = src/wizard/
 
 POST_STRIP_TARGET = radarr_extra_install
 
-# use alternate TMPDIR as /tmp might be too small.
-USE_ALTERNATE_TMPDIR = 1
-
 include ../../mk/spksrc.spk.mk
-
-# hack for bad libstdc++ on dsm6
-ifeq ($(call version_lt, ${SPK_TCVERS}, 7.0),1)
-DEPENDS := cross/libstdc++ $(DEPENDS)
-endif
 
 PACKAGE_VERSION = $(SPK_VERS)-spk$(SPK_REV)-$(SPK_NAME_ARCH)-$(SPK_TCVERS)
 PACKAGE_AUTHOR = [Team Radarr](https://radarr.video)
 
 .PHONY: radarr_extra_install
 radarr_extra_install:
+	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs update
+	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-install-suggests ca-certificates locales tzdata libicu57 libssl1.1 libstdc++6 zlib1g libsqlite3-0
+	rm -rf $(STAGING_DIR)/tmp/* $(STAGING_DIR)/var/lib/apt/lists/* $(STAGING_DIR)/var/tmp/*
 	@install -m 755 -d $(STAGING_DIR)/app
-	@echo "PackageVersion=$(PACKAGE_VERSION)\nPackageAuthor=$(PACKAGE_AUTHOR)" > $(STAGING_DIR)/package_info
+	@install -m 644 src/config.xml $(STAGING_DIR)/app/config.xml
+	@echo "PackageVersion=$(PACKAGE_VERSION)\nPackageAuthor=$(PACKAGE_AUTHOR)" > $(STAGING_DIR)/rootfs/usr/lib/radarr/package_info

@@ -17,6 +17,8 @@
 
 set -o pipefail
 
+apt-get update && apt-get -y install debuerreotype
+
 echo "::group:: ---- initialize build"
 make setup-synocommunity
 sed -i -e "s|#PARALLEL_MAKE\s*=.*|PARALLEL_MAKE=max|" \

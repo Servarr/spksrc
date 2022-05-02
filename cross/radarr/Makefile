@@ -31,5 +31,5 @@ include ../../mk/spksrc.install-resources.mk
 .PHONY: radarr_install
 radarr_install:
 	rm -rf $(WORK_DIR)/$(PKG_DIR)/Radarr.Update
-	mkdir -p $(STAGING_INSTALL_PREFIX)/bin
-	tar -cf - -C $(WORK_DIR)/$(PKG_NAME) . | tar -xf - -C $(STAGING_INSTALL_PREFIX)/bin
+	mkdir -p $(STAGING_INSTALL_PREFIX)/rootfs/usr/lib/radarr/bin
+	tar -cf - -C $(WORK_DIR)/$(PKG_NAME) . | tar -xf - -C $(STAGING_INSTALL_PREFIX)/rootfs/usr/lib/radarr/bin
