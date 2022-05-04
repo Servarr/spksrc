@@ -14,6 +14,8 @@ GNU_CONFIGURE = 1
 
 PRE_CONFIGURE_TARGET = bubblewrap_pre_configure
 
+PATCHES_LEVEL = 1
+
 include ../../mk/spksrc.cross-cc.mk
 
 .PHONY: bubblewrap_pre_configure

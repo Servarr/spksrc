@@ -40,8 +40,13 @@ USE_ALTERNATE_TMPDIR = 1
 
 include ../../mk/spksrc.spk.mk
 
+BWRAP_DEPENDS = cross/bubblewrap cross/debian-stretch
+
 ifeq ($(call version_lt, ${SPK_TCVERS}, 7.0),1)
-DEPENDS += cross/bubblewrap cross/debian-stretch
+DEPENDS += $(BWRAP_DEPENDS)
+app_extra_install: rootfs_install
+else ifeq ($(SPK_NAME_ARCH), comcerto2k)
+DEPENDS += $(BWRAP_DEPENDS)
 app_extra_install: rootfs_install
 else
 DEPENDS += cross/sqlite cross/radarr
