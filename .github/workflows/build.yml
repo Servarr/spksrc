@@ -79,6 +79,9 @@ jobs:
           path: distrib
           key: distrib-${{ github.run_id }}
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
       - name: Build Package (based on changed files)
         # We don't want to stop the build on errors.
         # Errors are reported in "Build Status"
