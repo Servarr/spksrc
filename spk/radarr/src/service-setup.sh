@@ -1,68 +1,51 @@
-
-# Radarr service setup
-
-RADARR="${SYNOPKG_PKGDEST}/share/Radarr/bin/Radarr"
-
-# Radarr uses custom Config and PID directories
-HOME_DIR="${SYNOPKG_PKGVAR}"
-CONFIG_DIR="${SYNOPKG_PKGVAR}/.config"
-PID_FILE="${CONFIG_DIR}/Radarr/radarr.pid"
-
-# Some have it stored in the root of package
-LEGACY_CONFIG_DIR="${SYNOPKG_PKGDEST}/.config"
+APP_LOWER="radarr"
+APP_UPPER="Radarr"
 
 GROUP="sc-download"
-LEGACY_GROUP="sc-media"
 
-SERVICE_COMMAND="env HOME=${HOME_DIR} LD_LIBRARY_PATH=${SYNOPKG_PKGDEST}/lib ${RADARR}"
+USR_LIB="/usr/lib/${APP_LOWER}"
+PID_FILE="${SYNOPKG_PKGVAR}/${APP_LOWER}.pid"
+
+# Some versions include bwrap to create a chroot container with newer libraries.
+# If the bwrap binary is in the package, use the chroot
+BWRAP="${SYNOPKG_PKGDEST}/bin/bwrap"
+
+if [ -f "${BWRAP}" ]; then
+    APP="${USR_LIB}/bin/${APP_UPPER}"
+    CONFIG_DIR="/var/lib/${APP_LOWER}"
+    SERVICE_COMMAND="${BWRAP} --bind ${SYNOPKG_PKGDEST}/rootfs / --proc /proc --dev /dev --bind ${SYNOPKG_PKGDEST}${USR_LIB} ${USR_LIB} --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} --bind /volume1 /volume1 --setenv HOME ${SYNOPKG_PKGVAR} ${APP} --nobrowser --data=${CONFIG_DIR}"
+else
+    APP="${SYNOPKG_PKGDEST}${USR_LIB}/bin/${APP_UPPER}"
+    SERVICE_COMMAND="env HOME=${SYNOPKG_PKGVAR} LD_LIBRARY_PATH=${SYNOPKG_PKGDEST}/lib ${APP} --nobrowser --data=${SYNOPKG_PKGVAR}"
+fi
+
 SVC_BACKGROUND=y
+
+fix_permissions ()
+{
+    if [ ${SYNOPKG_DSM_VERSION_MAJOR} -lt 7 ]; then
+        if [ -f "${BWRAP}" ]; then
+            chown root:root "${BWRAP}"
+            chmod u+s "${BWRAP}"
+        fi
+
+        set_unix_permissions "${SYNOPKG_PKGVAR}"
+    fi
+}
 
 service_postinst ()
 {
     # Move config.xml to .config
-    mkdir -p ${CONFIG_DIR}/Radarr
-    mv ${SYNOPKG_PKGDEST}/app/config.xml ${CONFIG_DIR}/Radarr/config.xml
-    
-    if [ ${SYNOPKG_DSM_VERSION_MAJOR} -lt 7 ]; then
-        set_unix_permissions "${CONFIG_DIR}"
+    mv ${SYNOPKG_PKGDEST}/app/config.xml ${SYNOPKG_PKGVAR}
 
-        # If nessecary, add user also to the old group before removing it
-        syno_user_add_to_legacy_group "${EFF_USER}" "${USER}" "${LEGACY_GROUP}"
-        syno_user_add_to_legacy_group "${EFF_USER}" "${USER}" "users"
-    fi
-}
-
-service_preupgrade ()
-{
-    # We have to account for legacy folder in the root
-    # It should go, after the upgrade, into /var/.config/
-    # The /var/ folder gets automatically copied by service-installer after this
-    if [ -d "${LEGACY_CONFIG_DIR}" ]; then
-        echo "Moving ${LEGACY_CONFIG_DIR} to ${INST_VAR}"
-        mv ${LEGACY_CONFIG_DIR} ${CONFIG_DIR} 2>&1
-    else
-        # Create, in case it's missing for some reason
-        mkdir ${CONFIG_DIR} 2>&1
-    fi
+    fix_permissions
 }
 
 service_postupgrade ()
 {
     # Make Radarr do an update check on start to avoid possible Radarr
     # downgrade when synocommunity package is updated
-    touch ${CONFIG_DIR}/Radarr/update_required
+    touch ${SYNOPKG_PKGVAR}/update_required
 
-    if [ ${SYNOPKG_DSM_VERSION_MAJOR} -lt 7 ]; then
-        set_unix_permissions "${CONFIG_DIR}"
-    fi
-    
-    UPDATE_FROM_VERSION=${SYNOPKG_OLD_PKGVER%-*}
-    UPDATE_FROM_REV=${SYNOPKG_OLD_PKGVER##*-}
-    if [ ${UPDATE_FROM_REV} -lt 6 ]; then
-        # If backup was created before new-style packages
-        # new updates/backups will fail due to permissions (see #3185)
-        # fixed in #3190, i.e. radarr v20180303-6
-        set_unix_permissions "/tmp/radarr_backup"
-        set_unix_permissions "/tmp/radarr_update"
-    fi
+    fix_permissions
 }
