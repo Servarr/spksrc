@@ -20,7 +20,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'SynoCommunity'
+    if: github.repository_owner == 'Servarr'
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -40,4 +40,4 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         with:
           push: true
-          tags: ghcr.io/synocommunity/spksrc:latest
+          tags: ghcr.io/servarr/spksrc:latest

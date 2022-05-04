@@ -18,7 +18,7 @@ on:
     - 'native/**'
   push:
     branches:
-      - "**"
+      - master
     paths:
     - 'spk/**'
     - 'cross/**'
