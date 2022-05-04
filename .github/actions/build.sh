@@ -17,7 +17,7 @@
 
 set -o pipefail
 
-apt-get update && apt-get -y install debuerreotype
+apt-get update && apt-get -y install debuerreotype qemu-user-static binfmt-support
 
 echo "::group:: ---- initialize build"
 make setup-synocommunity
