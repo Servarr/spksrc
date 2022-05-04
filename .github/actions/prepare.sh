@@ -6,7 +6,6 @@
 #
 # Functions:
 # - Evaluate all packages to build depending on files defined in ${GH_FILES}.
-# - ffmpeg is moved to head of packages to built first if triggered by its own or a dependent.
 # - Referenced native and cross packages of the packages to build are added to the download list.
 
 set -o pipefail
@@ -14,8 +13,8 @@ set -o pipefail
 echo "::group:: ---- find dependent packages"
 
 # filter for changes made in the spk directories and take unique package name (without spk folder)
-SPK_TO_BUILD+=" "
-SPK_TO_BUILD+=$(echo "${GH_FILES}" | tr ' ' '\n' | grep -oP "(spk)/\K[^\/]*" | sort -u | tr '\n' ' ')
+GH_FILES=$(find -type f -printf '%P\n')
+SPK_TO_BUILD=$(echo "${GH_FILES}" | tr ' ' '\n' | grep -oP "(spk)/\K[^\/]*" | sort -u | tr '\n' ' ')
 
 # filter for changes made in the cross and native directories and take unique package name (including cross or native folder)
 DEPENDENT_PACKAGES=$(echo "${GH_FILES}" | tr ' ' '\n' | grep -oP "(cross|native)/[^\/]*" | sort -u | tr '\n' ' ')
@@ -48,22 +47,6 @@ fi
 
 # remove duplicate packages
 packages=$(printf %s "${SPK_TO_BUILD}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
-
-
-# find all packages that depend on spk/ffmpeg is built before.
-all_ffmpeg_packages=$(find spk/ -maxdepth 2 -mindepth 2 -name "Makefile" -exec grep -Ho "export FFMPEG_DIR" {} \; | grep -Po ".*spk/\K[^/]*" | sort | tr '\n' ' ')
-
-# if ffmpeg or one of its dependents is to build, ensure
-# ffmpeg is first package in the list of packages to build.
-for package in ${packages}
-do
-    if [ "$(echo ffmpeg ${all_ffmpeg_packages} | grep -ow ${package})" != "" ]; then
-        packages_without_ffmpeg=$(echo "${packages}" | tr ' ' '\n' | grep -v "ffmpeg" | tr '\n' ' ')
-        packages="ffmpeg ${packages_without_ffmpeg}"
-        break;
-    fi
-done
-
 
 # find all noarch packages
 all_noarch=$(find spk/ -maxdepth 2 -mindepth 2 -name "Makefile" -exec grep -Ho "override ARCH" {} \; | grep -Po ".*spk/\K[^/]*" | sort | tr '\n' ' ')
