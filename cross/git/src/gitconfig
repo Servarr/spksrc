@@ -1,2 +1,0 @@
-[http]
-	sslcainfo = /etc/ssl/certs/ca-certificates.crt

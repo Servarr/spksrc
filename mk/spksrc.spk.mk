@@ -63,9 +63,7 @@ include ../../mk/spksrc.cross-env.mk
 include ../../mk/spksrc.depend.mk
 
 copy: depend
-include ../../mk/spksrc.wheel.mk
 
-copy: wheel
 include ../../mk/spksrc.copy.mk
 
 strip: copy
@@ -451,11 +449,6 @@ PUBLISH = publish-
 .NOTPARALLEL:
 endif
 
-KERNEL_REQUIRED = $(MAKE) kernel-required
-ifeq ($(strip $(KERNEL_REQUIRED)),)
-ALL_ACTION = $(sort $(basename $(subst -,.,$(basename $(subst .,,$(ARCHS_WITH_KERNEL_SUPPORT))))))
-endif
-
 ####
 
 .PHONY: publish-all-$(ACTION) all-$(ACTION) pre-build-native
@@ -561,10 +554,5 @@ publish-arch-%: spk_msg
 
 changelog:
 	@echo $(shell git log --pretty=format:"- %s" -- $(PWD))
-
-####
-
-### For make kernel-required
-include ../../mk/spksrc.kernel-required.mk
 
 ####

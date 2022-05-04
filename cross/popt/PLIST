@@ -1,3 +1,0 @@
-lib:lib/libpopt.so.0.0.0
-lnk:lib/libpopt.so.0
-lnk:lib/libpopt.so
