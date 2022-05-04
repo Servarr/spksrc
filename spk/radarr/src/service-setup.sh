@@ -12,7 +12,7 @@ GROUP="sc-download"
 # CONFIG_DIR is the directory inside the chroot
 CONFIG_DIR="/var/lib/radarr"
 
-SERVICE_COMMAND="${BWRAP} --bind ${SYNOPKG_PKGDEST}/rootfs / --proc /proc --dev /dev --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} --bind /volume1 /volume1 ${RADARR} --nobrowser --data=${CONFIG_DIR}"
+SERVICE_COMMAND="${BWRAP} --bind ${SYNOPKG_PKGDEST}/rootfs / --proc /proc --dev /dev --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} --bind /volume1 /volume1 --setenv HOME ${SYNOPKG_PKGVAR} ${RADARR} --nobrowser --data=${CONFIG_DIR}"
 SVC_BACKGROUND=y
 
 fix_permissions ()
