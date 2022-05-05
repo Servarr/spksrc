@@ -86,18 +86,29 @@ jobs:
         # We don't want to stop the build on errors.
         # Errors are reported in "Build Status"
         continue-on-error: true
+        env:
+          ARCH_PACKAGES: ${{ needs.prepare.outputs.arch_packages }}
+          NOARCH_PACKAGES: ${{ needs.prepare.outputs.noarch_packages }}
+          PUBLISH: ${{ github.event.inputs.publish }}
+          API_KEY: ${{ secrets.PUBLISH_API_KEY }}
+          GH_ARCH: ${{ matrix.arch }}
+          BUILD_ERROR_FILE: /github/workspace/build_errors.txt
+          BUILD_ERROR_LOGFILE: /github/workspace/build_log_errors.txt
+          BUILD_UNSUPPORTED_FILE: /github/workspace/build_unsupported.txt
+          BUILD_SUCCESS_FILE: /github/workspace/build_success.txt
         run: |
           /usr/bin/docker run --rm --privileged --workdir /github/workspace \
-          -e ARCH_PACKAGES=${{ needs.prepare.outputs.arch_packages }} \
-          -e NOARCH_PACKAGES=${{ needs.prepare.outputs.noarch_packages }} \
-          -e PUBLISH=${{ github.event.inputs.publish }} \
-          -e API_KEY=${{ secrets.PUBLISH_API_KEY }} \
-          -e GH_ARCH=${{ matrix.arch }} \
-          -e BUILD_ERROR_FILE=/github/workspace/build_errors.txt \
-          -e BUILD_ERROR_LOGFILE=/github/workspace/build_log_errors.txt \
-          -e BUILD_UNSUPPORTED_FILE=/github/workspace/build_unsupported.txt \
-          -e BUILD_SUCCESS_FILE=/github/workspace/build_success.txt \
+          -e ARCH_PACKAGES \
+          -e NOARCH_PACKAGES \
+          -e PUBLISH \
+          -e API_KEY \
+          -e GH_ARCH \
+          -e BUILD_ERROR_FILE \
+          -e BUILD_ERROR_LOGFILE \
+          -e BUILD_UNSUPPORTED_FILE \
+          -e BUILD_SUCCESS_FILE \
           -e INPUT_ENTRYPOINT -e HOME -e GITHUB_JOB -e GITHUB_REF -e GITHUB_SHA -e GITHUB_REPOSITORY -e GITHUB_REPOSITORY_OWNER -e GITHUB_RUN_ID -e GITHUB_RUN_NUMBER -e GITHUB_RETENTION_DAYS -e GITHUB_RUN_ATTEMPT -e GITHUB_ACTOR -e GITHUB_WORKFLOW -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e GITHUB_EVENT_NAME -e GITHUB_SERVER_URL -e GITHUB_API_URL -e GITHUB_GRAPHQL_URL -e GITHUB_REF_NAME -e GITHUB_REF_PROTECTED -e GITHUB_REF_TYPE -e GITHUB_WORKSPACE -e GITHUB_ACTION -e GITHUB_EVENT_PATH -e GITHUB_ACTION_REPOSITORY -e GITHUB_ACTION_REF -e GITHUB_PATH -e GITHUB_ENV -e GITHUB_STEP_SUMMARY -e RUNNER_OS -e RUNNER_ARCH -e RUNNER_NAME -e RUNNER_TOOL_CACHE -e RUNNER_TEMP -e RUNNER_WORKSPACE -e ACTIONS_RUNTIME_URL -e ACTIONS_RUNTIME_TOKEN -e ACTIONS_CACHE_URL -e GITHUB_ACTIONS=true -e CI=true --entrypoint "./.github/actions/build.sh" -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/spksrc/spksrc":"/github/workspace" ghcr.io/servarr/spksrc:latest
+
 
       - name: Build Status
         id: build_status
