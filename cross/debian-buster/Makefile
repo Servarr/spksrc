@@ -9,7 +9,7 @@ PKG_DIST_SITE = https://raw.githubusercontent.com/debuerreotype/docker-debian-ar
 
 DEPENDS =
 
-UNSUPPORTED_ARCHS = $(PPC_ARCHS) $(ARMv5_ARCHS) $(ARMv7L_ARCHS) $(i686_ARCHS)
+UNSUPPORTED_ARCHS = $(PPC_ARCHS) $(ARMv7L_ARCHS)
 
 HOMEPAGE = https://www.debian.org/
 COMMENT  = Debian base image
@@ -19,8 +19,6 @@ CHECKSUM_TARGET = debian_checksum
 INSTALL_TARGET = debian_install
 
 EXTRACT_PATH=$(WORK_DIR)/rootfs
-
-PKG_DIST_ARCH_LIST = x64 armv7 arm64
 
 include ../../mk/spksrc.archs.mk
 
@@ -32,6 +30,15 @@ PKG_SHA = dac1fb21147a9d20e3234a90a83269c9ea02588e
 else ifeq ($(findstring $(ARCH),$(ARMv8_ARCHS)),$(ARCH))
 PKG_DIST_ARCH = arm64
 PKG_SHA = 0cb2f80d1b5fc71d626a65a80bde83dff6be6278
+else ifeq ($(findstring $(ARCH),$(i686_ARCHS)),$(ARCH))
+PKG_DIST_ARCH = x86
+PKG_SHA = 7b1476e024fa599a18949a449b6f73cb373e45a9
+else ifeq ($(findstring $(ARCH),$(ARMv5_ARCHS)),$(ARCH))
+PKG_DIST_ARCH = armv5
+PKG_SHA = cdf4686a54ee2835b16dbb1cae620e5952667f88
+else ifeq ($(findstring $(ARCH),$(ARMvv7L_ARCHS)),$(ARCH))
+PKG_DIST_ARCH = armv5
+PKG_SHA = cdf4686a54ee2835b16dbb1cae620e5952667f88
 endif
 
 include ../../mk/spksrc.install-resources.mk
