@@ -40,7 +40,7 @@ USE_ALTERNATE_TMPDIR = 1
 
 include ../../mk/spksrc.spk.mk
 
-BWRAP_DEPENDS = cross/bubblewrap cross/debian-stretch
+BWRAP_DEPENDS = cross/bubblewrap cross/debian-buster
 
 ifeq ($(call version_lt, ${SPK_TCVERS}, 7.0),1)
 DEPENDS += $(BWRAP_DEPENDS)
@@ -59,7 +59,7 @@ PACKAGE_AUTHOR = [$(MAINTAINER)]($(MAINTAINER_URL))
 
 rootfs_install:
 	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs update; \
-	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-install-suggests ca-certificates locales tzdata libicu57 libssl1.1 libstdc++6 zlib1g libsqlite3-0 gdb strace; \
+	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-install-suggests ca-certificates locales tzdata libicu63 libssl1.1 libstdc++6 zlib1g libsqlite3-0 gdb strace; \
 	rm -rf $(STAGING_DIR)/tmp/* $(STAGING_DIR)/var/lib/apt/lists/* $(STAGING_DIR)/var/tmp/*; \
 
 app_extra_install:
