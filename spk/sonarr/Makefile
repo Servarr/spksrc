@@ -60,7 +60,7 @@ rootfs_install:
 	sudo debuerreotype-chroot $(STAGING_DIR)/rootfs apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF; \
 	sudo debuerreotype-chroot $(STAGING_DIR)/rootfs sh -c 'echo "deb https://download.mono-project.com/repo/debian stable-buster main" | tee /etc/apt/sources.list.d/mono-official.list'; \
 	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs update; \
-	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-insta-suggests locales tzdata libsqlite3-0 libmediainfo0v5 mono-develop ca-certificates-mono; \
+	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-install-suggests locales tzdata libsqlite3-0 libmediainfo0v5 mono-devel ca-certificates-mono; \
 	rm -rf $(STAGING_DIR)/tmp/* $(STAGING_DIR)/var/lib/apt/lists/* $(STAGING_DIR)/var/tmp/*; \
 
 app_extra_install:
