@@ -17,7 +17,7 @@ ROOTFS="${SYNOPKG_PKGDEST}/rootfs"
 
 APP="${USR_LIB}/bin/${APP_UPPER}"
 CONFIG_DIR="/var/lib/${APP_LOWER}"
-SERVICE_COMMAND="${BWRAP} --bind ${ROOTFS} / --proc /proc --dev /dev --bind ${SYNOPKG_PKGDEST}${USR_LIB} ${USR_LIB} --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} --bind /volume1 /volume1 --setenv HOME ${SYNOPKG_PKGVAR} mono ${APP}.exe -nobrowser -data=${CONFIG_DIR}"
+SERVICE_COMMAND="${BWRAP} --bind ${ROOTFS} / --proc /proc --dev /dev --bind ${SYNOPKG_PKGDEST}${USR_LIB} ${USR_LIB} --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} --bind /volume1 /volume1 --setenv HOME ${SYNOPKG_PKGVAR} mono --debug ${APP}.exe -nobrowser -data=${CONFIG_DIR}"
 
 SVC_BACKGROUND=y
 
