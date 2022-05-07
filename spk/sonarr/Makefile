@@ -60,7 +60,7 @@ rootfs_install:
 	sudo debuerreotype-chroot $(STAGING_DIR)/rootfs apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF; \
 	sudo debuerreotype-chroot $(STAGING_DIR)/rootfs sh -c 'echo "deb https://download.mono-project.com/repo/debian stable-buster main" | tee /etc/apt/sources.list.d/mono-official.list'; \
 	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs update; \
-	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-install-suggests locales tzdata libsqlite3-0 libmediainfo0v5 mono-devel ca-certificates-mono; \
+	sudo debuerreotype-apt-get $(STAGING_DIR)/rootfs install -y --no-install-recommends --no-install-suggests locales tzdata libsqlite3-0 libmediainfo0v5 mono-runtime ca-certificates-mono libmono-system-net-http4.0-cil libmono-corlib4.5-cil libmono-microsoft-csharp4.0-cil libmono-posix4.0-cil libmono-system-componentmodel-dataannotations4.0-cil libmono-system-configuration-install4.0-cil libmono-system-configuration4.0-cil libmono-system-core4.0-cil libmono-system-data-datasetextensions4.0-cil libmono-system-data4.0-cil libmono-system-identitymodel4.0-cil libmono-system-io-compression4.0-cil libmono-system-numerics4.0-cil libmono-system-runtime-serialization4.0-cil libmono-system-security4.0-cil libmono-system-servicemodel4.0a-cil libmono-system-serviceprocess4.0-cil libmono-system-transactions4.0-cil libmono-system-web4.0-cil libmono-system-xml-linq4.0-cil libmono-system-xml4.0-cil libmono-system4.0-cil; \
 	rm -rf $(STAGING_DIR)/tmp/* $(STAGING_DIR)/var/lib/apt/lists/* $(STAGING_DIR)/var/tmp/*; \
 
 app_extra_install:
