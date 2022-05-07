@@ -1,5 +1,5 @@
-APP_LOWER="radarr"
-APP_UPPER="Radarr"
+APP_LOWER="lidarr"
+APP_UPPER="Lidarr"
 
 GROUP="sc-download"
 
