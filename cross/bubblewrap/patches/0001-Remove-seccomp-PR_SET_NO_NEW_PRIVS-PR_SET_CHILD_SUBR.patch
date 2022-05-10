@@ -1,11 +1,12 @@
-From 2a9ffea35ca72aff2082450309864d4c5d6b383b Mon Sep 17 00:00:00 2001
+From 4ffde446cf59c72c7cd8fe9104d82168baa1b355 Mon Sep 17 00:00:00 2001
 From: ta264 <ta264@users.noreply.github.com>
 Date: Thu, 5 May 2022 19:00:44 +0100
 Subject: [PATCH] Remove seccomp, PR_SET_NO_NEW_PRIVS, PR_SET_CHILD_SUBREAPER
 
 ---
  bubblewrap.c | 171 +--------------------------------------------------
- 1 file changed, 2 insertions(+), 169 deletions(-)
+ configure.ac |   1 -
+ 2 files changed, 2 insertions(+), 170 deletions(-)
 
 diff --git a/bubblewrap.c b/bubblewrap.c
 index 2f2fca5..bca2b24 100644
@@ -291,6 +292,18 @@ index 2f2fca5..bca2b24 100644
    if (setup_finished_pipe[1] != -1)
      {
        char data = 0;
+diff --git a/configure.ac b/configure.ac
+index d6b72f3..9a62dac 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -91,7 +91,6 @@ dnl Keep this in sync with ostree, except remove -Werror=declaration-after-state
+ CC_CHECK_FLAGS_APPEND([WARN_CFLAGS], [CFLAGS], [\
+         -pipe \
+         -Wall \
+-        -Werror=shadow \
+ 	-Werror=empty-body \
+ 	-Werror=strict-prototypes \
+ 	-Werror=missing-prototypes \
 -- 
 2.25.1
 
