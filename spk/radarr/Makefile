@@ -38,19 +38,20 @@ POST_STRIP_TARGET = app_extra_install
 # DSM prevents executing from /tmp in 7.1
 USE_ALTERNATE_TMPDIR = 1
 
-include ../../mk/spksrc.spk.mk
+include ../../mk/spksrc.common.mk
 
-BWRAP_DEPENDS = cross/bubblewrap cross/debian-buster
-
-ifeq ($(call version_lt, ${SPK_TCVERS}, 7.0),1)
-DEPENDS += $(BWRAP_DEPENDS)
+ifeq ($(call version_lt, ${TCVERSION}, 7.0),1)
+DEPENDS += cross/bubblewrap cross/debian-buster
 app_extra_install: rootfs_install
-else ifeq ($(SPK_NAME_ARCH), comcerto2k)
-DEPENDS += $(BWRAP_DEPENDS)
+else ifeq ($(ARCH), comcerto2k)
+DEPENDS += cross/debian-buster
+SPK_DEPENDS = "bubblewrap>=0.6.1"
 app_extra_install: rootfs_install
 else
 DEPENDS += cross/sqlite cross/radarr
 endif
+
+include ../../mk/spksrc.spk.mk
 
 PACKAGE_VERSION = $(SPK_VERS)-spk$(SPK_REV)-$(SPK_NAME_ARCH)-$(SPK_TCVERS)
 PACKAGE_AUTHOR = [$(MAINTAINER)]($(MAINTAINER_URL))
