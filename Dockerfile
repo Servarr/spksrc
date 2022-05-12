@@ -20,8 +20,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 		check \
 		cmake \
 		curl \
-		cython \
-		debootstrap \
+                debootstrap \
+                debuerreotype \
 		ed \
 		expect \
 		fakeroot \
@@ -51,18 +51,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 		mercurial \
 		moreutils \
 		ncurses-dev \
-		ninja-build \
-		php \
 		pkg-config \
-		python3 \
-		python3-distutils \
 		rename \
 		rsync \
 		scons \
-		subversion \
 		sudo \
 		swig \
-		texinfo \
 		unzip \
 		xmlto \
 		zlib1g-dev && \
@@ -71,18 +65,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 	adduser --disabled-password --gecos '' user && \
 	adduser user sudo && \
 	echo "%users ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/users
-
-# Install setuptools, wheel and pip for Python2
-RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py -O - | python2
-# Install virtualenv and httpie for Python2
-# Use pip2 as default pip -> python3
-RUN pip2 install virtualenv httpie
-
-# Install setuptools, wheel and pip for Python3
-# Default pip -> python3 aware for native python wheels builds
-RUN wget https://bootstrap.pypa.io/get-pip.py -O - | python3
-# Install meson cross-platform build system
-RUN pip3 install meson==0.56.0
 
 # Volume pointing to spksrc sources
 VOLUME /spksrc

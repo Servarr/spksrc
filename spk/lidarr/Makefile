@@ -1,23 +1,23 @@
-SPK_NAME = radarr_official
-SPK_CONFLICT = radarr
-SPK_VERS = 4.1.0.6175
-SPK_ICON = src/radarr.png
+SPK_NAME = lidarr_official
+SPK_CONFLICT = lidarr
+SPK_VERS = 1.0.0.2570
+SPK_ICON = src/lidarr.png
 
 REQUIRED_MIN_DSM = 6.0
 
 # .NET is not supported on PPC, ARM5, ARM7L and x86
-UNSUPPORTED_ARCHS = $(PPC_ARCHS) $(ARMv5_ARCHS) $(ARMv7L_ARCHS) $(i686_ARCHS)
+UNSUPPORTED_ARCHS = $(PPC_ARCHS) $(ARMv5_ARCHS) $(ARMv7L_ARCHS)
 
-DEPENDS = cross/radarr
+DEPENDS = cross/lidarr
 
-MAINTAINER = Team Radarr
-MAINTAINER_URL = https://radarr.video/
-HELPURL    = https://wiki.servarr.com/Radarr
-SUPPORTURL = https://radarr.video/\#support
+MAINTAINER = Team Lidarr
+MAINTAINER_URL = https://lidarr.audio/
+HELPURL    = https://wiki.servarr.com/Lidarr
+SUPPORTURL = https://lidarr.audio/\#support
 
-DESCRIPTION = Radarr is a movie collection manager for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new movies and will interface with clients and indexers to grab, sort, and rename them. It can also be configured to automatically upgrade the quality of existing files in the library when a better quality format becomes available.
+DESCRIPTION  = Lidarr is a music collection manager for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new tracks from your favorite artists and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 STARTABLE = yes
-DISPLAY_NAME = Radarr
+DISPLAY_NAME = Lidarr
 CHANGELOG = "${DISPLAY_NAME} v$(SPK_VERS)"
 
 HOMEPAGE = $(MAINTAINER_URL)
@@ -25,7 +25,7 @@ LICENSE  = GPLv3
 
 SERVICE_USER = auto
 SERVICE_SETUP = src/service-setup.sh
-SERVICE_PORT = 8310
+SERVICE_PORT = 8686
 SERVICE_PORT_TITLE = $(DISPLAY_NAME)
 
 # Admin link for in DSM UI
@@ -48,7 +48,7 @@ DEPENDS += cross/debian-buster
 SPK_DEPENDS = "bubblewrap>=0.6.1"
 app_extra_install: rootfs_install
 else
-DEPENDS += cross/sqlite cross/radarr
+DEPENDS += cross/sqlite cross/lidarr
 endif
 
 include ../../mk/spksrc.spk.mk
@@ -65,5 +65,4 @@ rootfs_install:
 
 app_extra_install:
 	@install -m 755 -d $(STAGING_DIR)/app
-	@install -m 644 src/config.xml $(STAGING_DIR)/app/config.xml
-	@echo "PackageVersion=$(PACKAGE_VERSION)\nPackageAuthor=$(PACKAGE_AUTHOR)" > $(STAGING_DIR)/usr/lib/radarr/package_info
+	@echo "PackageVersion=$(PACKAGE_VERSION)\nPackageAuthor=$(PACKAGE_AUTHOR)" > $(STAGING_DIR)/usr/lib/lidarr/package_info
