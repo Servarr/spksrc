@@ -1,10 +1,25 @@
-## Contributing
-Before opening a new issue, check the [FAQ] and search open issues.
-If you can't find an answer, or if you want to open a package request, read [CONTRIBUTING] to make sure you include all the information needed for contributors to handle your request.
+# Installation
+
+[Installation Instructions](https://wiki.servarr.com/synology-packages)
+
+# Support
+
+- [Lidarr Discord](https://lidarr.audio/discord)
+- [Prowlarr Discord](https://prowlarr.com/discord)
+- [Radarr Discord](https://radarr.video/discord)
+- [Readarr Discord](https://readarr.com/discord)
+
+
+# Development
+
+Before opening a new issue, come by the Discord for [Lidarr](https://lidarr.audio/discord), [Prowlarr](https://prowlarr.com/discord), [Radarr](https://radarr.video/discord), [Readarr](https://readarr.com/discord)
+
 
 
 ## Setup Development Environment
+
 ### Docker
+
 *The Docker development environment supports Linux and macOS systems, but not Windows due to limitations of the underlying file system.*
 
 1. [Fork and clone] spksrc: `git clone https://github.com/YOUR-USERNAME/spksrc`
@@ -24,11 +39,13 @@ docker run -it -v $(pwd):/spksrc -e TAR_CMD="fakeroot tar" ghcr.io/synocommunity
 5. From there, follow the instructions in the [Developers HOW TO].
 
 ## Usage
+
 Once you have a development environment set up, you can start building packages, create new ones, or improve upon existing packages while making your changes available to other people.
 See the [Developers HOW TO] for information on how to use spksrc.
 
 
 ## License
+
 When not explicitly set, files are placed under a [3 clause BSD license]
 
 [3 clause BSD license]: http://www.opensource.org/licenses/BSD-3-Clause
@@ -37,5 +54,4 @@ When not explicitly set, files are placed under a [3 clause BSD license]
 [Fork and clone]: https://docs.github.com/en/github/getting-started-with-github/fork-a-repo
 [Developers HOW TO]: https://github.com/Servarr/spksrc/wiki/Developers-HOW-TO
 [Docker installation]: https://docs.docker.com/engine/installation
-[FAQ]: https://github.com/Servarr/spksrc/wiki/Frequently-Asked-Questions
 [Install Docker with wget]: https://docs.docker.com/linux/step_one
