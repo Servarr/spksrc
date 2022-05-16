@@ -11,13 +11,14 @@ DSM_ARMv7_ARCHS = alpine alpine4k armada370 armada375 armada38x armadaxp monaco
 DSM_ARMv7_ARCHS += comcerto2k
 
 # Generic archs used for packages supporting multiple archs (where applicable)
+GENERIC_ARMv7VFPv3d16_ARCH = armv7vfpv3d16
 GENERIC_ARMv7_ARCH = armv7
 GENERIC_ARMv8_ARCH = aarch64
 GENERIC_x64_ARCH = x64
 GENERIC_ARCHS = $(GENERIC_ARMv7_ARCH) $(GENERIC_ARMv8_ARCH) $(GENERIC_x64_ARCH)
 
 ARMv5_ARCHS = 88f6281
-ARMv7_ARCHS = $(GENERIC_ARMv7_ARCH) $(DSM_ARMv7_ARCHS) $(SRM_ARMv7_ARCHS)
+ARMv7_ARCHS = $(GENERIC_ARMv7_ARCH) $(GENERIC_ARMv7VFPv3d16_ARCH) $(DSM_ARMv7_ARCHS) $(SRM_ARMv7_ARCHS)
 # hi3535 is not supported by generic ARMv7 arch
 ARMv7L_ARCHS = hi3535
 ARMv8_ARCHS = $(GENERIC_ARMv8_ARCH) rtd1296 armada37xx

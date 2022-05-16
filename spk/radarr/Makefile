@@ -1,6 +1,6 @@
 SPK_NAME = radarr_official
 SPK_CONFLICT = radarr
-SPK_VERS = 4.1.0.6175
+SPK_VERS = 4.2.0.6283
 SPK_ICON = src/radarr.png
 
 REQUIRED_MIN_DSM = 6.0
