@@ -1,7 +1,7 @@
 TC_NAME = syno-armv7
 
 # generic toolchain for arm7hf DSM
-TC_ARCH = alpine alpine4k armada375 armada38x monaco
+TC_ARCH = alpine alpine4k armada375 armada38x armadaxp monaco
 TC_VERS = 7.0
 TC_BUILD = 41890
 TC_KERNEL = 3.10.108
