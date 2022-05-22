@@ -75,8 +75,10 @@ start_daemon ()
             fi
         fi
         if [ -n "${SVC_WRITE_PID}" -a -n "${SVC_BACKGROUND}" -a -n "${PID_FILE}" ]; then
+            echo "Writing PID file " >> ${LOG_FILE}
             echo "$!" > "${PID_FILE}"
         else
+            echo "Waiting for startup status " >> ${LOG_FILE}
             wait_for_status 0 ${SVC_WAIT_TIMEOUT}
         fi
     fi
@@ -101,11 +103,14 @@ stop_daemon ()
 
 daemon_status ()
 {
-
+    echo "DaemonStatus" >> ${LOG_FILE}
     if [ -n "${PID_FILE}" -a -r "${PID_FILE}" ]; then
+        pid=$(cat "${PID_FILE}")
+        echo "Got PID ${pid}" >> ${LOG_FILE}
         if kill -0 $(cat "${PID_FILE}") > /dev/null 2>&1; then
             return
         fi
+        echo "Removing PID file" >> ${LOG_FILE}
         rm -f "${PID_FILE}" > /dev/null
     fi
     return 1
@@ -117,6 +122,7 @@ wait_for_status ()
     # default value: 20 seconds
     counter=${timeout:=20}
     while [ ${counter} -gt 0 ]; do
+        echo "WaitForStatus counter ${counter}" >> ${LOG_FILE}
         daemon_status
         [ $? -eq $1 ] && return
         let counter=counter-1
