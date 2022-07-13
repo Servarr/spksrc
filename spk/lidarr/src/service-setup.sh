@@ -26,6 +26,7 @@ else
 fi
 
 SVC_BACKGROUND=y
+SVC_WAIT_TIMEOUT=120
 
 fix_permissions ()
 {

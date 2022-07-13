@@ -22,6 +22,7 @@ VOLUMES=$(mount -l | grep -E '/volume([0-9]{1,2}\b|USB[0-9]{1,2}/)' | awk '{ pri
 SERVICE_COMMAND="${BWRAP} --bind ${ROOTFS} / --proc /proc --dev /dev --ro-bind /etc/resolv.conf /etc/resolv.conf --bind ${SYNOPKG_PKGDEST}${USR_LIB} ${USR_LIB} --bind ${SYNOPKG_PKGVAR} ${CONFIG_DIR} ${VOLUMES} --share-net --setenv HOME ${SYNOPKG_PKGVAR} mono --debug ${APP}.exe -nobrowser -data=${CONFIG_DIR}"
 
 SVC_BACKGROUND=y
+SVC_WAIT_TIMEOUT=120
 
 fix_permissions ()
 {
