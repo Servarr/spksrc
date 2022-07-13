@@ -1,6 +1,6 @@
 SPK_NAME = lidarr_official
 SPK_CONFLICT = lidarr
-SPK_VERS = 1.0.0.2570
+SPK_VERS = 1.0.2.2592
 SPK_ICON = src/lidarr.png
 
 REQUIRED_MIN_DSM = 6.0

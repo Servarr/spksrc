@@ -1,6 +1,6 @@
 SPK_NAME = prowlarr_official
 SPK_CONFLICT = prowlarr
-SPK_VERS = 0.3.0.1730
+SPK_VERS = 0.4.2.1879
 SPK_ICON = src/prowlarr.png
 
 REQUIRED_MIN_DSM = 6.0

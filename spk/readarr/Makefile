@@ -1,6 +1,6 @@
 SPK_NAME = readarr_official
 SPK_CONFLICT = readarr
-SPK_VERS = 0.1.0.1248
+SPK_VERS = 0.1.1.1320
 SPK_ICON = src/readarr.png
 
 REQUIRED_MIN_DSM = 6.0
